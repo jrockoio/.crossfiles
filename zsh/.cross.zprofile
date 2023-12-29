@@ -11,25 +11,12 @@ bindkey -s ^f "tmux-sessionizer\n"
 
 export LSCOLORS="Cxdxgxfxexegedabagacad"
 
-# starship
-if hash starship 2> /dev/null; then eval "$(starship init zsh)"; fi
-# zoxide
 if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
-# bat
+if hash starship 2> /dev/null; then eval "$(starship init zsh)"; fi
 if hash bat 2> /dev/null; then alias cat=bat; alias bat=cat; fi
-# neovim
+if hash richgo 2> /dev/null; then alias go=richgo; fi # go test highlighting: github.com/kyoh86/richgo
 if hash nvim 2> /dev/null; then alias vim=nvim; fi
-alias v='vim'
-# just
 alias j='just'
-# starship
-if hash starship 2> /dev/null; then eval "$(starship init zsh)"; fi
-# zoxide
-if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
-# bat
-if hash bat 2> /dev/null; then alias cat=bat; alias bat=cat; fi
-# go test highlighting: github.com/kyoh86/richgo
-if hash richgo 2> /dev/null; then alias go=richgo; fi
 
 # list sizes of folders in order including hidden
 alias dus='du -hs .[^.]* * | sort -hr'
@@ -62,23 +49,22 @@ alias gnow='git commit --amend --date="now" --no-edit'
 export FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# cargo update & upgrade
+# rust
 alias cupd='cargo install-update -gla'
 alias cupg='cargo install-update -ga'
-
-# rust
 . "$HOME/.cargo/env"
 
+
 # vim
+alias v='vim'
 export VISUAL=vim
 export EDITOR="$VISUAL"
-#
 # vi mode
 bindkey -v
 
+# nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # zsh completions

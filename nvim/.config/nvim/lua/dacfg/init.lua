@@ -65,9 +65,6 @@ vim.keymap.set("i", "˚", '<Plug>(copilot-previous)')
 
 vim.cmd('filetype plugin on')
 
--- open in github
-require "gitlinker".setup({ mappings = nil })
-
 require("nvim-treesitter.install").prefer_git = true
 require 'nvim-treesitter.configs'.setup {
   -- for windwp/nvim-ts-autotag
