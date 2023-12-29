@@ -1,0 +1,27 @@
+# ~/.config/starship.toml
+
+command_timeout = 9999999999
+
+[character]
+#use_symbol_for_status = true
+
+[git_branch]
+symbol = "🌱 "
+
+[git_status]
+conflicted = "!"
+untracked = "🤷 ×${count}"
+stashed = "💰"
+modified = "📝 ×${count}"
+staged = '[++\($count\)](green)'
+deleted = "🗑️  ×${count}"
+
+[golang]
+symbol = "go "
+
+[package]
+disabled = true
+[nodejs]
+disabled = true
+[aws]
+disabled = true
