@@ -16,8 +16,10 @@ if hash starship 2> /dev/null; then eval "$(starship init zsh)"; fi
 if hash bat 2> /dev/null; then alias cat=bat; fi
 if hash exa 2> /dev/null; then
   alias ls=exa
+  alias lsd='exa -sold'
   alias ll='exa -abhgHlS'
   alias lls='exa -abhgHlS -sold'
+  alias tree='exa --tree --long'
 fi
 if hash richgo 2> /dev/null; then alias go=richgo; fi # go test highlighting: github.com/kyoh86/richgo
 if hash nvim 2> /dev/null; then alias vim=nvim; fi
