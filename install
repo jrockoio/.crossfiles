@@ -6,3 +6,6 @@ do
     stow -D $folder
     stow $folder
 done
+
+git clone https://github.com/jeffreytse/zsh-vi-mode.git $HOME/.zsh-vi-mode
+git clone https://github.com/zplug/zplug $ZPLUG_HOME

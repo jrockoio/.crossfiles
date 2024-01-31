@@ -29,9 +29,10 @@ vim.opt.termguicolors = true
 vim.g.floaterm_width = .95
 vim.g.floaterm_height = .8
 
--- nerd commenter
-vim.api.nvim_set_keymap('n', 'gcc', '<Plug>NERDCommenterToggle', { noremap = true })
-vim.api.nvim_set_keymap('v', 'gcc', '<Plug>NERDCommenterToggle', { noremap = true })
+-- Comment.nvim
+require('Comment').setup({
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+})
 
 vim.g.mapleader = " "
 

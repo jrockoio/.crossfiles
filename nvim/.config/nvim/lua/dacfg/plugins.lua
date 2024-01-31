@@ -26,6 +26,12 @@ return require('packer').startup(function(use)
   use 'williamboman/mason-lspconfig.nvim'
   use 'williamboman/nvim-lsp-installer'
 
+  -- lua config
+  use 'folke/neodev.nvim'
+
+  -- lsp status
+  use { 'j-hui/fidget.nvim', opts = {} }
+
   -- null-ls
   use {
     'jose-elias-alvarez/null-ls.nvim',
@@ -36,6 +42,9 @@ return require('packer').startup(function(use)
   -- treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
+    requires = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
     run = ':TSUpdate'
   }
 
@@ -49,6 +58,7 @@ return require('packer').startup(function(use)
       'saadparwaiz1/cmp_luasnip',
       -- Snippets
       'L3MON4D3/LuaSnip',
+      'rafamadriz/friendly-snippets',
     },
   }
 
@@ -117,7 +127,9 @@ return require('packer').startup(function(use)
   use 'editorconfig/editorconfig-vim'
 
   -- auto-commenting
-  use 'preservim/nerdcommenter'
+  use 'numToStr/Comment.nvim'
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
+
   -- surround
   use 'kylechui/nvim-surround'
   -- auto close brackets
@@ -144,10 +156,6 @@ return require('packer').startup(function(use)
 
   use { 'f-person/git-blame.nvim',
     requires = { 'f-person/lua-timeago' }
-  }
-  -- lsp status
-  use { 'j-hui/fidget.nvim',
-    tag = "legacy"
   }
 
   -- tf syntax

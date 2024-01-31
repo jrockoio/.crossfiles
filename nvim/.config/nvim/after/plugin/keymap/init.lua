@@ -6,8 +6,6 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
-vim.api.nvim_set_keymap('n', 'gcc', '<Plug>NERDCommenterToggle', { noremap = true })
-
 --fzf
 vim.keymap.set('n', '<c-p>', require('fzf-lua').files, opts)
 vim.keymap.set('n', '<c-f>', require('fzf-lua').live_grep_native, opts)
