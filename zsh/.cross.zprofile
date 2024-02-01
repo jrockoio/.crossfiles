@@ -50,6 +50,8 @@ alias gcu='git fetch && git merge --no-edit origin/main'
 alias gnow='git commit --amend --date="now" --no-edit'
 
 # fzf
+# export FZF_DEFAULT_OPTS=""
+export FZF_DEFAULT_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 export FZF_CTRL_T_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 
 # rust
@@ -73,7 +75,7 @@ function zvm_config() {
   ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
 
-source $HOME/.zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 zplug "jeffreytse/zsh-vi-mode"
 zplug load
@@ -108,3 +110,5 @@ fpath+=~/.config/zsh_completions
 
 autoload -Uz compinit
 compinit -u
+
+[ -f "$HOME/.zsh-plugins/fzf-tab/fzf-tab.plugin.zsh" ] && source "$HOME/.zsh-plugins/fzf-tab/fzf-tab.plugin.zsh"

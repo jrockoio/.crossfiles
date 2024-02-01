@@ -7,5 +7,8 @@ do
     stow $folder
 done
 
-git clone https://github.com/jeffreytse/zsh-vi-mode.git $HOME/.zsh-vi-mode
 git clone https://github.com/zplug/zplug $ZPLUG_HOME
+
+mkdir $HOME/.zsh-plugins
+git clone https://github.com/jeffreytse/zsh-vi-mode.git $HOME/.zsh-plugins/zsh-vi-mode
+git clone https://github.com/Aloxaf/fzf-tab $HOME/.zsh-plugins/fzf-tab
