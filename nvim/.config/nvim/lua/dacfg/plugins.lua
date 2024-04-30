@@ -144,6 +144,9 @@ return require('packer').startup(function(use)
   use 'ray-x/go.nvim'
   use 'ray-x/guihua.lua' -- recommended if need floating window support
 
+  -- java
+  use 'mfussenegger/nvim-jdtls'
+
   -- nvim-test
   use { "klen/nvim-test" }
 
@@ -152,7 +155,6 @@ return require('packer').startup(function(use)
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
-  use 'nvim-lua/lsp-status.nvim'
 
   use { 'f-person/git-blame.nvim',
     requires = { 'f-person/lua-timeago' }

@@ -59,7 +59,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
-local servers = { 'ccls', 'rust_analyzer', 'pyright', 'terraformls', 'tailwindcss', 'eslint' ,'jsonls'}
+local servers = { 'ccls', 'rust_analyzer', 'pyright', 'terraformls', 'tailwindcss', 'eslint' ,'jsonls', 'cucumber_language_server'}
 for _, lsp in ipairs(servers) do
 	lspconfig[lsp].setup {
 		on_attach = on_attach,
@@ -130,3 +130,5 @@ lspconfig.cssls.setup {
 lspconfig.jsonls.setup{
 	capabilities = capabilities,
 }
+
+return { on_attach = on_attach, capabilities = capabilities }

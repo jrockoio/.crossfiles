@@ -58,11 +58,11 @@ end
 -- copilot
 vim.g.copilot_no_tab_map = true
 -- alt a
-vim.api.nvim_set_keymap("i", "å", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+vim.api.nvim_set_keymap("i", "<C-a>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 -- alt j
-vim.keymap.set("i", "∆", '<Plug>(copilot-next)')
+vim.keymap.set("i", "˜", '<Plug>(copilot-next)')
 -- alt k
-vim.keymap.set("i", "˚", '<Plug>(copilot-previous)')
+vim.keymap.set("i", "π", '<Plug>(copilot-previous)')
 
 vim.cmd('filetype plugin on')
 

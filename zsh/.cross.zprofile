@@ -65,26 +65,28 @@ alias v='vim'
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
-# zplug
-export ZPLUG_HOME="$HOME/.zplug"
-source "$ZPLUG_HOME/init.zsh"
+load_zplug() {
+  # zplug
+  export ZPLUG_HOME="$HOME/.zplug"
+  source "$ZPLUG_HOME/init.zsh"
 
-# zsh vi mode
-function zvm_config() {
-  ZVM_CURSOR_STYLE_ENABLED=false
-  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  # zsh vi mode
+  function zvm_config() {
+    ZVM_CURSOR_STYLE_ENABLED=false
+    ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  }
+
+  source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+  zplug "jeffreytse/zsh-vi-mode", defer:1
+  zplug load
+
+  function zvm_after_init() {
+    bindkey -s ^f "tmux-sessionizer\n"
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  }
 }
-
-source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-zplug "jeffreytse/zsh-vi-mode"
-zplug load
-
-function zvm_after_init() {
-  bindkey -s ^f "tmux-sessionizer\n"
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-}
-#end zsh vi mode
+load_zplug
 
 
 # lazy load nvm
@@ -109,6 +111,6 @@ nvm() {
 fpath+=~/.config/zsh_completions
 
 autoload -Uz compinit
-compinit -u
+compinit -C
 
 [ -f "$HOME/.zsh-plugins/fzf-tab/fzf-tab.plugin.zsh" ] && source "$HOME/.zsh-plugins/fzf-tab/fzf-tab.plugin.zsh"
