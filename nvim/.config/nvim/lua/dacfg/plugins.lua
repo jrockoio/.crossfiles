@@ -19,6 +19,19 @@ local plugins = {}
 
 if vim.env.COPILOT == '1' then
   table.insert(plugins, 'github/copilot.vim')
+  table.insert(plugins, {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "main",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
+    },
+    opts = {
+      -- debug = true, -- Enable debugging
+      -- See Configuration section for rest
+    },
+    -- See Commands section for default commands if you want to lazy load on them
+  })
 end
 
 table.insert(plugins, {
@@ -26,20 +39,18 @@ table.insert(plugins, {
   'neovim/nvim-lspconfig',
   'williamboman/mason.nvim',
   'williamboman/mason-lspconfig.nvim',
-  'williamboman/nvim-lsp-installer',
 
   -- lua config
   'folke/neodev.nvim',
 
   -- lsp status
-  { 'j-hui/fidget.nvim', opts = {} },
+  { 'j-hui/fidget.nvim',         opts = {} },
 
-  -- null-ls
+  -- none-ls
   {
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
     dependencies = "nvim-lua/plenary.nvim",
   },
-  'jose-elias-alvarez/typescript.nvim',
 
   -- treesitter
   {
@@ -93,7 +104,8 @@ table.insert(plugins, {
   'isobit/vim-caddyfile',
 
   -- find/replace
-  { 'nvim-pack/nvim-spectre',
+  {
+    'nvim-pack/nvim-spectre',
     dependencies = 'nvim-lua/plenary.nvim',
   },
 
@@ -101,7 +113,8 @@ table.insert(plugins, {
   'mhinz/vim-grepper',
 
   -- fzf
-  { 'ibhagwan/fzf-lua',
+  {
+    'ibhagwan/fzf-lua',
     dependencies = { 'kyazdani42/nvim-web-devicons' } -- optional for icon support
   },
 
@@ -122,13 +135,13 @@ table.insert(plugins, {
     dependencies = 'nvim-lua/plenary.nvim',
   },
 
-  { 'akinsho/git-conflict.nvim', version = "*", config = true},
+  { 'akinsho/git-conflict.nvim', version = "*", config = true },
 
   --editorconfig
-  'editorconfig/editorconfig-vim',
+  -- 'editorconfig/editorconfig-vim',
 
   -- auto-commenting
-  'numToStr/Comment.nvim',
+  { 'numToStr/Comment.nvim',     lazy = false },
   'JoosepAlviste/nvim-ts-context-commentstring',
 
   -- surround
@@ -139,17 +152,45 @@ table.insert(plugins, {
   'tpope/vim-endwise',
   -- auto close html tags
   'windwp/nvim-ts-autotag',
+  -- split/join
+  'AndrewRadev/splitjoin.vim',
 
+  -- typescript
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
 
   -- go
-  'ray-x/go.nvim',
-  'ray-x/guihua.lua', -- recommended if need floating window support
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      -- "neovim/nvim-lspconfig",
+    },
+    -- config = function()
+    --   require("go").setup({
+    --     -- disable_defaults = true,
+    --     verbose_tests = true,
+    --     -- this doesn't work
+    --     --lsp_cfg = {settings={gopls={analyses={composites= false }}}}
+    --   })
+    -- end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
 
   -- java
-  'mfussenegger/nvim-jdtls',
+  {
+    'mfussenegger/nvim-jdtls',
+    ft = { 'java', 'drools' },
+  },
+  { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
 
   -- nvim-test
-   "klen/nvim-test",
+  "klen/nvim-test",
 
   -- lualine
   {
@@ -157,7 +198,8 @@ table.insert(plugins, {
     dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
   },
 
-  { 'f-person/git-blame.nvim',
+  {
+    'f-person/git-blame.nvim',
     dependencies = { 'f-person/lua-timeago' }
   },
 
@@ -165,6 +207,8 @@ table.insert(plugins, {
   'hashivim/vim-terraform',
   -- just syntax
   'NoahTheDuke/vim-just',
+  -- drools syntax'
+  -- 'vim-scripts/drools.vim',
 
   -- Color scheme
   'dikiaap/minimalist',

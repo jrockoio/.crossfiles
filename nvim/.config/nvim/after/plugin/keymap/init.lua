@@ -7,8 +7,10 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
 --fzf
-vim.keymap.set('n', '<c-p>', require('fzf-lua').files, opts)
-vim.keymap.set('n', '<c-f>', require('fzf-lua').live_grep_native, opts)
+vim.keymap.set('n', '<c-p>', function() require('fzf-lua').files({ fzf_cli_args="-i" }) end, opts)
+-- vim.keymap.set('n', '<c-f>', function() require('fzf-lua').live_grep_native({ fzf_cli_args="-i" }) end, opts)
+vim.keymap.set('n', '<c-f>', function() require('fzf-lua').live_grep_native() end, opts)
+vim.keymap.set('n', '<c-l>', function() require('fzf-lua').live_grep_resume() end, opts)
 vim.keymap.set('n', '<leader>k', require('fzf-lua').grep_cword, opts)
 vim.keymap.set('n', '<leader>K', require('fzf-lua').grep_cWORD, opts)
 vim.keymap.set('v', '<leader>k', require('fzf-lua').grep_visual, opts)
@@ -28,6 +30,14 @@ vim.keymap.set('v', '<leader>og',
 		require "gitlinker".get_buf_range_url("v", { action_callback = require "gitlinker.actions".open_in_browser })
 	end
 )
+
+
+-- split/join
+vim.g.splitjoin_split_mapping = ''
+vim.g.splitjoin_join_mapping = ''
+vim.keymap.set('n', 'gS', ':SplitjoinSplit<cr><cr>', opts)
+vim.keymap.set('n', 'gJ', ':SplitjoinJoin<cr><cr>', opts)
+
 
 -- replace space with ",<cr>"
 vim.keymap.set('n', '<leader>ji', [[:s/,\ /",\r"/g]], opts)

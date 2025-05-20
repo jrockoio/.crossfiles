@@ -1,5 +1,9 @@
 require('dacfg.plugins')
 
+if vim.env.COPILOT == '1' then
+  require('dacfg.config.copilot')
+end
+
 vim.g.gitblame_date_format = '%r'
 
 vim.o.winbar = "%=%m %f"
@@ -34,13 +38,17 @@ require('Comment').setup({
   pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 })
 
+vim.cmd [[ autocmd BufRead,BufNewFile *.drl set filetype=drools ]]
+
+local ft = require('Comment.ft')
+ft.drools = { '//%s', '/*%s*/' }
 
 -- {{{ colorscheme
 --local colorscheme = "gruvbox"
 --local colorscheme = "tokyonight-night"
---local colorscheme = "tokyonight-day"
+local colorscheme = "tokyonight-day"
 --local colorscheme = "tokyonight-moon"
-local colorscheme = "tokyonight-storm"
+-- local colorscheme = "tokyonight-storm"
 
 local ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
 if not ok then
@@ -54,14 +62,6 @@ end
 -- hardtime
 --vim.g.hardtime_default_on = 1
 
--- copilot
-vim.g.copilot_no_tab_map = true
--- alt a
-vim.api.nvim_set_keymap("i", "<C-a>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
--- alt j
-vim.keymap.set("i", "˜", '<Plug>(copilot-next)')
--- alt k
-vim.keymap.set("i", "π", '<Plug>(copilot-previous)')
 
 vim.cmd('filetype plugin on')
 
@@ -72,15 +72,40 @@ require 'nvim-treesitter.configs'.setup {
     enable = true,
   },
 
+  -- for Comment.nvim
+  context_commentstring = {
+    config = {
+      javascript = {
+        __default = '// %s',
+        jsx_element = '{/* %s */}',
+        jsx_fragment = '{/* %s */}',
+        jsx_attribute = '// %s',
+        comment = '// %s',
+      },
+      typescript = { __default = '// %s', __multiline = '/* %s */' },
+    },
+  },
+
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "go", "lua", "javascript", "typescript" },
+  ensure_installed = {
+    "go",
+    "lua",
+    "javascript",
+    "typescript",
+    "tsx",
+    "java",
+    "markdown"
+  },
 
   sync_install = false,
   auto_install = true,
   highlight = {
-   enable = true,
-   additional_vim_regex_highlighting = false,
+    enable = true,
+    additional_vim_regex_highlighting = false,
   },
+  indent = {
+    enable = true,
+  }
 }
 
 require("nvim-surround").setup()
@@ -88,8 +113,7 @@ require "fidget".setup {}
 
 -- nvim-test
 local nvimtest = require("nvim-test")
-require('nvim-test.runners.go-test'):setup{
-	command = "richgo"
+require('nvim-test.runners.go-test'):setup {
+  command = "richgo"
 }
 nvimtest.setup()
-

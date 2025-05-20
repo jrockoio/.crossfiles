@@ -65,28 +65,30 @@ alias v='vim'
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
-load_zplug() {
-  # zplug
-  export ZPLUG_HOME="$HOME/.zplug"
-  source "$ZPLUG_HOME/init.zsh"
+load_zgenom() {
+  # load zgenom
+  source "${HOME}/.zgenom/zgenom.zsh"
 
-  # zsh vi mode
+  zgenom autoupdate
+
   function zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=false
     ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
   }
-
-  source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-  zplug "jeffreytse/zsh-vi-mode", defer:1
-  zplug load
-
   function zvm_after_init() {
     bindkey -s ^f "tmux-sessionizer\n"
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   }
+  source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  # if the init script doesn't exist
+  if ! zgenom saved; then
+      echo "Creating a zgenom save"
+
+      zgenom load "jeffreytse/zsh-vi-mode"
+      zgenom save
+  fi
 }
-load_zplug
+load_zgenom
 
 
 # lazy load nvm
@@ -105,6 +107,11 @@ nvm() {
   nvm $@
 }
 #end nvm
+
+#pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # zsh completions
 [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
