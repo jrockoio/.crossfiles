@@ -46,9 +46,9 @@ ft.drools = { '//%s', '/*%s*/' }
 -- {{{ colorscheme
 --local colorscheme = "gruvbox"
 --local colorscheme = "tokyonight-night"
-local colorscheme = "tokyonight-day"
+-- local colorscheme = "tokyonight-day"
 --local colorscheme = "tokyonight-moon"
--- local colorscheme = "tokyonight-storm"
+local colorscheme = "tokyonight-storm"
 
 local ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
 if not ok then

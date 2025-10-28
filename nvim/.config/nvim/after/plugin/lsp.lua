@@ -64,8 +64,14 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local lspconfig = require('lspconfig')
-local servers = {
+-- local lspconfig = require('lspconfig')
+
+vim.lsp.config("*", {
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+vim.lsp.enable({
   'ccls',
   'rust_analyzer',
   'pyright',
@@ -75,20 +81,21 @@ local servers = {
   'jsonls',
   'cucumber_language_server',
   -- 'ts_ls',
-}
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end
+})
+-- for _, lsp in ipairs(servers) do
+--   vim.lsp.config(lsp) = {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--   }
+--   vim.lsp.enable(lsp)
+-- end
 
-lspconfig.drools_lsp.setup {
+-- lspconfig.drools_lsp.setup {
   -- on_attach = on_attach,
   -- capabilities = capabilities,
   -- cmd = { 'java', '-jar', '~/.local/share/nvim/mason/packages/drools-lsp/drools-lsp-server-jar-with-dependencies.jar' },
-  drools = { jar = '~/.local/share/nvim/mason/packages/drools-lsp/drools-lsp-server-jar-with-dependencies.jar' },
-}
+  -- drools = { jar = '~/.local/share/nvim/mason/packages/drools-lsp/drools-lsp-server-jar-with-dependencies.jar' },
+-- }
 
 -- require("typescript").setup({
 --   server = { -- pass options to lspconfig's setup method
@@ -97,7 +104,9 @@ lspconfig.drools_lsp.setup {
 --   },
 -- })
 
-lspconfig.gopls.setup {
+
+-- +++ non trivial configs ++
+vim.lsp.config.gopls = {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -111,8 +120,9 @@ lspconfig.gopls.setup {
     }
   }
 }
+vim.lsp.enable("gopls")
 
-lspconfig.lua_ls.setup {
+vim.lsp.config.lua_ls = {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -135,8 +145,9 @@ lspconfig.lua_ls.setup {
     }
   }
 }
+vim.lsp.enable("lua_ls")
 
-lspconfig.yamlls.setup {
+vim.lsp.config.yamlls = {
   settings = {
     yaml = {
       schemas = {
@@ -146,13 +157,18 @@ lspconfig.yamlls.setup {
     },
   }
 }
+vim.lsp.enable("yamlls")
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-lspconfig.cssls.setup {
+vim.lsp.config.cssls = {
   capabilities = capabilities,
 }
-lspconfig.jsonls.setup {
+vim.lsp.enable("cssls")
+
+vim.lsp.config.jsonls = {
   capabilities = capabilities,
 }
+vim.lsp.enable("jsonls")
+
 
 return { on_attach = on_attach, capabilities = capabilities }

@@ -11,7 +11,7 @@ local function blame()
 end
 
 local function lsp_client()
-	local clients = vim.lsp.get_active_clients()
+	local clients = vim.lsp.get_clients()
 	local ret = ""
 	for i, c in ipairs(clients) do
 		if i > 1 then
