@@ -74,7 +74,7 @@ vim.lsp.config("*", {
 vim.lsp.enable({
   'ccls',
   'rust_analyzer',
-  'pyright',
+  'basedpyright',
   'terraformls',
   'tailwindcss',
   'eslint',
