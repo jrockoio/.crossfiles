@@ -27,6 +27,7 @@ if vim.env.COPILOT == '1' then
       { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
     },
     opts = {
+      -- model = "gpt-4o",
       -- debug = true, -- Enable debugging
       -- See Configuration section for rest
     },

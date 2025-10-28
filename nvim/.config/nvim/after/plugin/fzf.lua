@@ -1,4 +1,5 @@
-require('fzf-lua').setup {
+local fzflua = require('fzf-lua')
+fzflua.setup {
   keymap = {
     fzf = {
       ["ctrl-a"] = "select-all+accept",
@@ -27,3 +28,7 @@ require('fzf-lua').setup {
 			-g '!vendor/*'",
   },
 }
+
+require('fzf-lua').register_ui_select()
+-- fzflua.register_ui_select()
+print("here")

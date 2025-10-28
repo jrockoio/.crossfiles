@@ -1,7 +1,7 @@
 -- lsp installer
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "gopls" },
+  ensure_installed = { "gopls", "ts_ls" },
   automatic_installation = true
 })
 
@@ -80,7 +80,7 @@ vim.lsp.enable({
   'eslint',
   'jsonls',
   'cucumber_language_server',
-  -- 'ts_ls',
+  'ts_ls',
 })
 -- for _, lsp in ipairs(servers) do
 --   vim.lsp.config(lsp) = {
