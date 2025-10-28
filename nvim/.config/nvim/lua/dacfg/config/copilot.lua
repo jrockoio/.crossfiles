@@ -1,3 +1,8 @@
+-- -----------------------------------------------------------------
+-- Configuration for GitHub Copilot (Completions)
+-- This section seems to be for copilot.lua or copilot.vim
+-- and is not related to CopilotChat. It should be fine to keep.
+-- -----------------------------------------------------------------
 vim.api.nvim_set_keymap("i", "<C-]>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 -- alt n
 vim.keymap.set("i", "˜", '<Plug>(copilot-next)')
@@ -6,97 +11,82 @@ vim.keymap.set("i", "π", '<Plug>(copilot-previous)')
 
 vim.g.copilot_no_tab_map = true
 
+-- -----------------------------------------------------------------
+-- Configuration for CopilotChat.nvim
+-- -----------------------------------------------------------------
 require("CopilotChat").setup {
   debug = false, -- Enable debugging
-  auto_insert_mode = false
-  -- See Configuration section for rest
+  auto_insert_mode = false,
+  -- Note: You may need to set up a default UI select if you want
+  -- fzf-lua for all pickers. For example:
+  -- vim.ui.select = require('fzf-lua').register_ui_select()
 }
 
 local opts = { noremap = true, silent = true }
 
-local chat = require('CopilotChat')
-local actions = require('CopilotChat.actions')
-local integration = require('CopilotChat.integrations.fzflua')
+-- -----------------
+-- CopilotChat Keymaps
+-- -----------------
 
-local function pick(pick_actions)
-  return function()
-    integration.pick(pick_actions(), {
-      fzf_tmux_opts = {
-        ['-d'] = '45%',
-      },
-    })
-  end
-end
+-- [REPLACED] Keymap for prompts (e.g., Explain, Fix, Optimize)
+-- This now uses the built-in :CopilotChatPrompts command.
+vim.keymap.set({ "n", "v" }, "<leader>cp", "<cmd>CopilotChatPrompts<CR>", {
+  desc = "CopilotChat - Show prompts"
+})
 
---copilot chat
-vim.keymap.set({ "n", "v" }, "<leader>cp", pick(actions.prompt_actions), opts)
-vim.keymap.set({ "n" }, "<leader>ct", function()
-  vim.cmd('normal! V') -- Select the current line
-  chat.open()
-  vim.cmd('startinsert')
-end, { desc = 'Normal Chat' })
-vim.keymap.set({ "v" }, "<leader>ct", function()
-  chat.open()
-  vim.cmd('startinsert')
-end, { desc = 'Normal Chat' })
-vim.keymap.set({ "n" }, "<leader>cb",
-  function()
-    vim.cmd('normal! ggVG') -- select entire buffer
-    vim.cmd('CopilotChat')
-    vim.cmd('startinsert')
-  end,
-  { desc = "Buffer Chat" }
-)
+-- [UPDATED] Chat with current line (Normal Mode)
+-- Selects the current line and opens chat in visual mode
+vim.keymap.set({ "n" }, "<leader>ct", "V<cmd>CopilotChat<CR>", {
+  desc = "CopilotChat - Chat with current line"
+})
 
--- Using FZF to select files and chat --
+-- [UPDATED] Chat with visual selection (Visual Mode)
+-- This now uses the built-in :CopilotChat command
+vim.keymap.set({ "v" }, "<leader>ct", "<cmd>CopilotChat<CR>", {
+  desc = "CopilotChat - Chat with selection"
+})
 
--- Function to read the content of a file
-local function read_file(file_path)
-  local file = io.open(file_path, "r")
-  if not file then return nil end
-  local content = file:read("*all")
-  file:close()
-  return content
-end
+-- [UPDATED] Chat with entire buffer
+-- Selects the whole buffer and opens chat
+vim.keymap.set({ "n" }, "<leader>cb", "ggVG<cmd>CopilotChat<CR>", {
+  desc = "CopilotChat - Chat with buffer"
+})
 
--- Function to gather content from multiple files
-local function gather_files_content(file_paths)
-  local content = ""
-  for _, file_path in ipairs(file_paths) do
-    local file_content = read_file(file_path)
-    if file_content then
-      content = content .. "\n" .. file_content
-    end
-  end
-  return content
-end
-
--- Custom function to initiate CopilotChat with multiple files' content
-local function copilot_chat_with_files(file_paths)
-  local content = gather_files_content(file_paths)
-  print("content:", content)
-  if content and #content > 0 then
-    vim.cmd('CopilotChat')      -- Start CopilotChat
-    vim.fn.setreg('"', content) -- Set the gathered content to the default register
-    vim.cmd('normal! "P')       -- Paste the content into the chat
-    vim.cmd('startinsert')      -- Start insert mode
-  end
-end
+-- -----------------------------------------------------------------
+-- Custom Function: Chat with selected files using fzf-lua
+-- [This has been completely rewritten to use the new #file resource]
+-- -----------------------------------------------------------------
 
 -- Function to select files using fzf-lua and initiate CopilotChat
 local function select_files_and_chat()
-  print("select_files_and_chat")
   require('fzf-lua').files({
     fzf_cli_args = "-i", -- Case-insensitive search
     actions = {
+      -- Use "default" for Enter key
       ["default"] = function(selected)
-        print("selected:", vim.inspect(selected))
-        copilot_chat_with_files(selected)
+        if not selected or #selected == 0 then
+          print("[CopilotChat] No files selected.")
+          return
+        end
+
+        -- Build a prompt string made of #file resources
+        local prompt_parts = {}
+        for _, file_path in ipairs(selected) do
+          -- The #file resource works with relative or absolute paths
+          table.insert(prompt_parts, "#file:" .. file_path)
+        end
+
+        local prompt = table.concat(prompt_parts, " ")
+
+        -- Open CopilotChat with the selected files as context
+        -- The user can then type their question.
+        vim.cmd("CopilotChat " .. prompt)
       end
     }
   })
 end
 
 -- Key mapping to select files and chat
-vim.keymap.set({ "n" }, "<leader>cf",
-  select_files_and_chat, { desc = "Select Files and Chat" })
+vim.keymap.set({ "n" }, "<leader>cf", select_files_and_chat, {
+  desc = "CopilotChat - Select files to chat with"
+})
