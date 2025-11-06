@@ -38,8 +38,6 @@ require('Comment').setup({
   pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 })
 
-vim.cmd [[ autocmd BufRead,BufNewFile *.drl set filetype=drools ]]
-
 local ft = require('Comment.ft')
 ft.drools = { '//%s', '/*%s*/' }
 
@@ -65,48 +63,6 @@ end
 
 vim.cmd('filetype plugin on')
 
-require("nvim-treesitter.install").prefer_git = true
-require 'nvim-treesitter.configs'.setup {
-  -- for windwp/nvim-ts-autotag
-  autotag = {
-    enable = true,
-  },
-
-  -- for Comment.nvim
-  context_commentstring = {
-    config = {
-      javascript = {
-        __default = '// %s',
-        jsx_element = '{/* %s */}',
-        jsx_fragment = '{/* %s */}',
-        jsx_attribute = '// %s',
-        comment = '// %s',
-      },
-      typescript = { __default = '// %s', __multiline = '/* %s */' },
-    },
-  },
-
-  -- A list of parser names, or "all"
-  ensure_installed = {
-    "go",
-    "lua",
-    "javascript",
-    "typescript",
-    "tsx",
-    "java",
-    "markdown"
-  },
-
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-  indent = {
-    enable = true,
-  }
-}
 
 require("nvim-surround").setup()
 require "fidget".setup {}

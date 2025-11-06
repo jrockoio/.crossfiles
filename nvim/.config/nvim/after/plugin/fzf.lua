@@ -30,5 +30,3 @@ fzflua.setup {
 }
 
 require('fzf-lua').register_ui_select()
--- fzflua.register_ui_select()
-print("here")

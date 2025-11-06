@@ -45,12 +45,14 @@ table.insert(plugins, {
   'folke/neodev.nvim',
 
   -- lsp status
-  { 'j-hui/fidget.nvim',         opts = {} },
+  { 'j-hui/fidget.nvim', opts = {} },
 
   -- none-ls
   {
     'nvimtools/none-ls.nvim',
     dependencies = "nvim-lua/plenary.nvim",
+    config = function()
+    end,
   },
 
   -- treesitter
@@ -59,7 +61,59 @@ table.insert(plugins, {
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
-    build = ':TSUpdate'
+    build = ':TSUpdate',
+    lazy = false,
+    config = function()
+      require("nvim-treesitter.install").prefer_git = true
+      require 'nvim-treesitter.configs'.setup {
+        -- for windwp/nvim-ts-autotag
+        autotag = {
+          enable = true,
+        },
+
+        -- for Comment.nvim
+        context_commentstring = {
+          config = {
+            javascript = {
+              __default = '// %s',
+              jsx_element = '{/* %s */}',
+              jsx_fragment = '{/* %s */}',
+              jsx_attribute = '// %s',
+              comment = '// %s',
+            },
+            typescript = { __default = '// %s', __multiline = '/* %s */' },
+          },
+        },
+
+        -- A list of parser names, or "all"
+        ensure_installed = {
+          "go",
+          "lua",
+          "html",
+          "json",
+          "bash",
+          "css",
+          "javascript",
+          "typescript",
+          "tsx",
+          "java",
+          "markdown",
+          "toml",
+          "python",
+          "yaml",
+        },
+
+        sync_install = true,
+        auto_install = true,
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
+        indent = {
+          enable = true,
+        }
+      }
+    end,
   },
 
   -- completion
@@ -183,31 +237,31 @@ table.insert(plugins, {
   --   build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   -- },
   {
-  "ray-x/go.nvim",
-  dependencies = {  -- optional packages
-    "ray-x/guihua.lua",
-    "neovim/nvim-lspconfig",
-    "nvim-treesitter/nvim-treesitter",
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      -- lsp_keymaps = false,
+      -- other options
+    },
+    config = function(lp, opts)
+      require("go").setup(opts)
+      local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = "*.go",
+        callback = function()
+          require('go.format').goimports()
+        end,
+        group = format_sync_grp,
+      })
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
-  opts = {
-    -- lsp_keymaps = false,
-    -- other options
-  },
-  config = function(lp, opts)
-    require("go").setup(opts)
-    local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = "*.go",
-      callback = function()
-      require('go.format').goimports()
-      end,
-      group = format_sync_grp,
-    })
-  end,
-  event = {"CmdlineEnter"},
-  ft = {"go", 'gomod'},
-  build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
-},
 
   -- java
   {

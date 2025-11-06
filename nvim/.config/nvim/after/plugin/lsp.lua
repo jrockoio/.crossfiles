@@ -64,8 +64,6 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
--- local lspconfig = require('lspconfig')
-
 vim.lsp.config("*", {
   capabilities = capabilities,
   on_attach = on_attach,
@@ -80,32 +78,18 @@ vim.lsp.enable({
   'eslint',
   'jsonls',
   'cucumber_language_server',
-  'ts_ls',
 })
--- for _, lsp in ipairs(servers) do
---   vim.lsp.config(lsp) = {
---     on_attach = on_attach,
---     capabilities = capabilities,
---   }
---   vim.lsp.enable(lsp)
--- end
 
--- lspconfig.drools_lsp.setup {
-  -- on_attach = on_attach,
-  -- capabilities = capabilities,
-  -- cmd = { 'java', '-jar', '~/.local/share/nvim/mason/packages/drools-lsp/drools-lsp-server-jar-with-dependencies.jar' },
-  -- drools = { jar = '~/.local/share/nvim/mason/packages/drools-lsp/drools-lsp-server-jar-with-dependencies.jar' },
--- }
-
--- require("typescript").setup({
---   server = { -- pass options to lspconfig's setup method
---     on_attach = on_attach,
---     capabilities = capabilities,
---   },
--- })
+require("typescript-tools").setup {
+  on_attach = on_attach,
+  settings = {
+    tsserver_plugins = {
+      "@styled/typescript-styled-plugin",
+    }
+  }
+}
 
 
--- +++ non trivial configs ++
 vim.lsp.config.gopls = {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -152,7 +136,8 @@ vim.lsp.config.yamlls = {
     yaml = {
       schemas = {
         ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-        ["https://github-pages.cloud.capitalone.com/cyber-sre-automation/BogieValidator/schema/bogiefile.json"] = "/Bogiefile",
+        ["https://github-pages.cloud.capitalone.com/cyber-sre-automation/BogieValidator/schema/bogiefile.json"] =
+        "/Bogiefile",
       },
     },
   }

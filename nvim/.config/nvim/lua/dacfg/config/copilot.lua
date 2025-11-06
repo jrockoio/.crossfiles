@@ -16,13 +16,12 @@ vim.g.copilot_no_tab_map = true
 -- -----------------------------------------------------------------
 require("CopilotChat").setup {
   debug = false, -- Enable debugging
-  auto_insert_mode = false,
+  auto_insert_mode = true,
   -- Note: You may need to set up a default UI select if you want
   -- fzf-lua for all pickers. For example:
   -- vim.ui.select = require('fzf-lua').register_ui_select()
 }
 
-local opts = { noremap = true, silent = true }
 
 -- -----------------
 -- CopilotChat Keymaps
@@ -34,21 +33,20 @@ vim.keymap.set({ "n", "v" }, "<leader>cp", "<cmd>CopilotChatPrompts<CR>", {
   desc = "CopilotChat - Show prompts"
 })
 
--- [UPDATED] Chat with current line (Normal Mode)
--- Selects the current line and opens chat in visual mode
-vim.keymap.set({ "n" }, "<leader>ct", "V<cmd>CopilotChat<CR>", {
+-- Toggles Chat
+vim.keymap.set({ "n" }, "<leader>ct", "<cmd>CopilotChat<CR>i", {
   desc = "CopilotChat - Chat with current line"
 })
 
 -- [UPDATED] Chat with visual selection (Visual Mode)
 -- This now uses the built-in :CopilotChat command
-vim.keymap.set({ "v" }, "<leader>ct", "<cmd>CopilotChat<CR>", {
+vim.keymap.set({ "v" }, "<leader>ct", "<cmd>CopilotChat<CR>i", {
   desc = "CopilotChat - Chat with selection"
 })
 
 -- [UPDATED] Chat with entire buffer
 -- Selects the whole buffer and opens chat
-vim.keymap.set({ "n" }, "<leader>cb", "ggVG<cmd>CopilotChat<CR>", {
+vim.keymap.set({ "n" }, "<leader>cb", "ggVG<cmd>CopilotChat<CR>i", {
   desc = "CopilotChat - Chat with buffer"
 })
 
