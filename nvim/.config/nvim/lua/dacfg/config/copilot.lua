@@ -34,19 +34,19 @@ vim.keymap.set({ "n", "v" }, "<leader>cp", "<cmd>CopilotChatPrompts<CR>", {
 })
 
 -- Toggles Chat
-vim.keymap.set({ "n" }, "<leader>ct", "<cmd>CopilotChat<CR>i", {
+vim.keymap.set({ "n" }, "<leader>ct", "<cmd>CopilotChat<CR>", {
   desc = "CopilotChat - Chat with current line"
 })
 
 -- [UPDATED] Chat with visual selection (Visual Mode)
 -- This now uses the built-in :CopilotChat command
-vim.keymap.set({ "v" }, "<leader>ct", "<cmd>CopilotChat<CR>i", {
+vim.keymap.set({ "v" }, "<leader>ct", "<cmd>CopilotChat<CR>", {
   desc = "CopilotChat - Chat with selection"
 })
 
 -- [UPDATED] Chat with entire buffer
 -- Selects the whole buffer and opens chat
-vim.keymap.set({ "n" }, "<leader>cb", "ggVG<cmd>CopilotChat<CR>i", {
+vim.keymap.set({ "n" }, "<leader>cb", "ggVG<cmd>CopilotChat<CR>", {
   desc = "CopilotChat - Chat with buffer"
 })
 
