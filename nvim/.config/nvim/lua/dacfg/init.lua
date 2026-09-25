@@ -62,14 +62,3 @@ end
 
 
 vim.cmd('filetype plugin on')
-
-
-require("nvim-surround").setup()
-require "fidget".setup {}
-
--- nvim-test
-local nvimtest = require("nvim-test")
-require('nvim-test.runners.go-test'):setup {
-  command = "richgo"
-}
-nvimtest.setup()

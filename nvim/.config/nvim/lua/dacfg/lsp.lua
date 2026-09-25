@@ -1,7 +1,8 @@
 -- lsp installer
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "gopls", "ts_ls" },
+  -- TypeScript is managed by typescript-tools below.
+  ensure_installed = { "gopls" },
   automatic_installation = true
 })
 
@@ -14,21 +15,25 @@ require('mason-tool-installer').setup({
 })
 
 local null_ls = require("null-ls")
+local null_ls_sources = {
+  null_ls.builtins.diagnostics.golangci_lint.with({
+    diagnostics_format = "#{m} (#{s})",
+  }),
+  null_ls.builtins.formatting.prettierd.with({
+    condition = function(utils)
+      return utils.has_file({ ".prettierrc" })
+    end,
+  }),
+  null_ls.builtins.diagnostics.actionlint,
+}
+
+-- codespell is optional so machines without it keep the same startup behavior.
+if vim.fn.executable('codespell') == 1 then
+  table.insert(null_ls_sources, null_ls.builtins.diagnostics.codespell)
+end
+
 require("null-ls").setup({
-  sources = {
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.golangci_lint.with({
-      diagnostics_format = "#{m} (#{s})",
-    }),
-    null_ls.builtins.formatting.prettierd.with({
-      condition = function(utils)
-        return utils.has_file({ ".prettierrc" })
-      end,
-    }),
-    null_ls.builtins.diagnostics.actionlint,
-    null_ls.builtins.diagnostics.misspell,
-  },
+  sources = null_ls_sources,
   -- debug = true
 })
 
@@ -74,11 +79,32 @@ vim.lsp.enable({
   'rust_analyzer',
   'basedpyright',
   'terraformls',
-  'tailwindcss',
   'eslint',
-  'jsonls',
   'cucumber_language_server',
 })
+
+-- The upstream Tailwind config falls back to `.git`, which attaches the
+-- server to almost every web-related file in every Git repository. Only start
+-- it when the project actually declares Tailwind or has a Tailwind/PostCSS
+-- config file.
+vim.lsp.config.tailwindcss = {
+  root_dir = function(bufnr, on_dir)
+    local util = require('lspconfig.util')
+    local fname = vim.api.nvim_buf_get_name(bufnr)
+    local root_files = {
+      'tailwind.config.js',
+      'tailwind.config.cjs',
+      'tailwind.config.mjs',
+      'tailwind.config.ts',
+    }
+    root_files = util.insert_package_json(root_files, 'tailwindcss', fname)
+    root_files = util.insert_package_json(root_files, '@tailwindcss/postcss', fname)
+    root_files = util.insert_package_json(root_files, '@tailwindcss/vite', fname)
+    local match = vim.fs.find(root_files, { path = fname, upward = true })[1]
+    on_dir(match and vim.fs.dirname(match) or nil)
+  end,
+}
+vim.lsp.enable('tailwindcss')
 
 require("typescript-tools").setup {
   on_attach = on_attach,

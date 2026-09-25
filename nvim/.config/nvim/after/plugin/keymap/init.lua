@@ -11,9 +11,9 @@ vim.keymap.set('n', '<c-p>', function() require('fzf-lua').files({ fzf_cli_args=
 -- vim.keymap.set('n', '<c-f>', function() require('fzf-lua').live_grep_native({ fzf_cli_args="-i" }) end, opts)
 vim.keymap.set('n', '<c-f>', function() require('fzf-lua').live_grep_native() end, opts)
 vim.keymap.set('n', '<c-l>', function() require('fzf-lua').live_grep_resume() end, opts)
-vim.keymap.set('n', '<leader>k', require('fzf-lua').grep_cword, opts)
-vim.keymap.set('n', '<leader>K', require('fzf-lua').grep_cWORD, opts)
-vim.keymap.set('v', '<leader>k', require('fzf-lua').grep_visual, opts)
+vim.keymap.set('n', '<leader>k', function() require('fzf-lua').grep_cword() end, opts)
+vim.keymap.set('n', '<leader>K', function() require('fzf-lua').grep_cWORD() end, opts)
+vim.keymap.set('v', '<leader>k', function() require('fzf-lua').grep_visual() end, opts)
 
 --gitgutter
 vim.keymap.set('n', '<leader>d', ":GitGutterPreviewHunk<cr>", opts)

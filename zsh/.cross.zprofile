@@ -9,7 +9,6 @@ path+=("/usr/local/go/bin")
 export LSCOLORS="Cxdxgxfxexegedabagacad"
 
 if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
-if hash starship 2> /dev/null; then eval "$(starship init zsh)"; fi
 if hash bat 2> /dev/null; then alias cat=bat; fi
 if hash exa 2> /dev/null; then
   alias ls=exa

@@ -36,22 +36,20 @@ if vim.env.COPILOT == '1' then
 end
 
 table.insert(plugins, {
-  -- Configurations for Nvim LSP
-  'neovim/nvim-lspconfig',
-  'williamboman/mason.nvim',
-  'williamboman/mason-lspconfig.nvim',
-
-  -- lua config
-  'folke/neodev.nvim',
-
-  -- lsp status
-  { 'j-hui/fidget.nvim', opts = {} },
-
-  -- none-ls
   {
-    'nvimtools/none-ls.nvim',
-    dependencies = "nvim-lua/plenary.nvim",
+    'neovim/nvim-lspconfig',
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = {
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'nvimtools/none-ls.nvim',
+      'pmizio/typescript-tools.nvim',
+      'nvim-lua/plenary.nvim',
+      { 'j-hui/fidget.nvim', opts = {} },
+    },
     config = function()
+      require('dacfg.lsp')
     end,
   },
 
@@ -103,10 +101,15 @@ table.insert(plugins, {
           "yaml",
         },
 
-        sync_install = true,
+        sync_install = false,
         auto_install = true,
         highlight = {
           enable = true,
+          disable = function(_, bufnr)
+            local uv = vim.uv or vim.loop
+            local ok, stats = pcall(uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+            return ok and stats and stats.size > 200 * 1024
+          end,
           additional_vim_regex_highlighting = false,
         },
         indent = {
@@ -119,6 +122,7 @@ table.insert(plugins, {
   -- completion
   {
     'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
     dependencies = {
       -- Autocompletion
       'hrsh7th/cmp-nvim-lsp',
@@ -128,18 +132,24 @@ table.insert(plugins, {
       'L3MON4D3/LuaSnip',
       'rafamadriz/friendly-snippets',
     },
+    config = function()
+      require('dacfg.completion')
+    end,
   },
 
   -- markdown preview
   {
     "iamcco/markdown-preview.nvim",
     build = function() vim.fn["mkdp#util#install"]() end,
+    cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" },
+    ft = { "markdown" },
   },
 
   -- movement
-  'takac/vim-hardtime',
+  { 'takac/vim-hardtime', cmd = { 'HardTimeToggle', 'HardTimeOn', 'HardTimeOff' } },
   {
     'jinh0/eyeliner.nvim',
+    event = 'VeryLazy',
     config = function()
       require 'eyeliner'.setup {
         highlight_on_key = true, -- show highlights only after keypress
@@ -150,37 +160,46 @@ table.insert(plugins, {
   {
     'ThePrimeagen/harpoon',
     dependencies = 'nvim-lua/plenary.nvim',
+    keys = { '<leader>a', '<C-e>', '<C-j>', '<C-k>', '<C-l>', '<C-;>' },
+    config = function()
+      require('dacfg.harpoon')
+    end,
   },
 
   -- lint
-  'mfussenegger/nvim-lint',
+  { 'mfussenegger/nvim-lint', event = 'BufReadPost' },
 
   --caddyfile
-  'isobit/vim-caddyfile',
+  { 'isobit/vim-caddyfile', ft = 'caddy' },
 
   -- find/replace
   {
     'nvim-pack/nvim-spectre',
     dependencies = 'nvim-lua/plenary.nvim',
+    lazy = true,
   },
 
   --grepper
-  'mhinz/vim-grepper',
+  { 'mhinz/vim-grepper', cmd = 'Grepper' },
 
   -- fzf
   {
     'ibhagwan/fzf-lua',
-    dependencies = { 'kyazdani42/nvim-web-devicons' } -- optional for icon support
+    lazy = true,
+    dependencies = { 'kyazdani42/nvim-web-devicons' }, -- optional for icon support
+    config = function()
+      require('dacfg.fzf')
+    end,
   },
 
   -- debugging
-  'mfussenegger/nvim-dap',
-  'leoluz/nvim-dap-go',
+  { 'mfussenegger/nvim-dap', lazy = true },
+  { 'leoluz/nvim-dap-go', ft = 'go' },
 
   -- lf
-  'VebbNix/lf-vim',
-  'ptzz/lf.vim',
-  'voldikss/vim-floaterm',
+  { 'VebbNix/lf-vim', cmd = 'Lf' },
+  { 'ptzz/lf.vim', cmd = { 'Lf', 'LfCurrentFile' } },
+  { 'voldikss/vim-floaterm', cmd = { 'FloatermNew', 'FloatermToggle', 'FloatermKill' } },
 
   -- git
   'airblade/vim-gitgutter',
@@ -188,9 +207,14 @@ table.insert(plugins, {
   {
     'ruifm/gitlinker.nvim',
     dependencies = 'nvim-lua/plenary.nvim',
+    lazy = true,
+    keys = { { '<leader>og', mode = { 'n', 'v' } } },
+    config = function()
+      require('dacfg.gitlinker')
+    end,
   },
 
-  { 'akinsho/git-conflict.nvim', version = "*", config = true },
+  { 'akinsho/git-conflict.nvim', version = "*", config = true, event = 'BufReadPost' },
 
   --editorconfig
   -- 'editorconfig/editorconfig-vim',
@@ -200,21 +224,21 @@ table.insert(plugins, {
   'JoosepAlviste/nvim-ts-context-commentstring',
 
   -- surround
-  'kylechui/nvim-surround',
+  { 'kylechui/nvim-surround', event = 'VeryLazy', opts = {} },
   -- auto close brackets
-  'rstacruz/vim-closer',
+  { 'rstacruz/vim-closer', event = 'InsertEnter' },
   -- auto end functions
-  'tpope/vim-endwise',
+  { 'tpope/vim-endwise', event = 'InsertEnter' },
   -- auto close html tags
   'windwp/nvim-ts-autotag',
   -- split/join
-  'AndrewRadev/splitjoin.vim',
+  { 'AndrewRadev/splitjoin.vim', keys = { 'gS', 'gJ' } },
 
   -- typescript
   {
     "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
+    ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
 
   -- go
@@ -268,34 +292,50 @@ table.insert(plugins, {
     'mfussenegger/nvim-jdtls',
     ft = { 'java', 'drools' },
   },
-  { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
+  { 'WhoIsSethDaniel/mason-tool-installer.nvim', lazy = true },
 
   -- nvim-test
-  "klen/nvim-test",
+  {
+    "klen/nvim-test",
+    cmd = { "TestNearest", "TestFile", "TestLast", "TestVisit" },
+    config = function()
+      require('nvim-test.runners.go-test'):setup { command = 'richgo' }
+      require('nvim-test').setup()
+    end,
+  },
 
   -- lualine
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
-  },
-
-  {
-    'f-person/git-blame.nvim',
-    dependencies = { 'f-person/lua-timeago' }
+    event = 'VeryLazy',
+    dependencies = {
+      'kyazdani42/nvim-web-devicons',
+      'f-person/git-blame.nvim',
+      'f-person/lua-timeago',
+    },
+    config = function()
+      require('dacfg.lualine')
+    end,
   },
 
   -- tf syntax
-  'hashivim/vim-terraform',
+  { 'hashivim/vim-terraform', ft = 'terraform' },
   -- just syntax
-  'NoahTheDuke/vim-just',
+  { 'NoahTheDuke/vim-just', ft = 'just' },
   -- drools syntax'
   -- 'vim-scripts/drools.vim',
 
   -- Color scheme
-  'dikiaap/minimalist',
-  'morhetz/gruvbox',
-  'folke/tokyonight.nvim',
+  { 'dikiaap/minimalist', lazy = true },
+  { 'morhetz/gruvbox', lazy = true },
+  { 'folke/tokyonight.nvim', lazy = true },
 
 })
 
-require('lazy').setup(plugins)
+require('lazy').setup(plugins, {
+  performance = {
+    rtp = {
+      disabled_plugins = { 'tohtml', 'tutor' },
+    },
+  },
+})
