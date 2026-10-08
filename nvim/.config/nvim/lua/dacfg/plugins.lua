@@ -44,6 +44,7 @@ table.insert(plugins, {
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'nvimtools/none-ls.nvim',
+      'nvimtools/none-ls-extras.nvim',
       'pmizio/typescript-tools.nvim',
       'nvim-lua/plenary.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
@@ -56,8 +57,10 @@ table.insert(plugins, {
   -- treesitter
   {
     'nvim-treesitter/nvim-treesitter',
+    -- This setup uses the legacy nvim-treesitter.configs API.
+    branch = 'master',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master' },
     },
     build = ':TSUpdate',
     lazy = false,
@@ -67,20 +70,6 @@ table.insert(plugins, {
         -- for windwp/nvim-ts-autotag
         autotag = {
           enable = true,
-        },
-
-        -- for Comment.nvim
-        context_commentstring = {
-          config = {
-            javascript = {
-              __default = '// %s',
-              jsx_element = '{/* %s */}',
-              jsx_fragment = '{/* %s */}',
-              jsx_attribute = '// %s',
-              comment = '// %s',
-            },
-            typescript = { __default = '// %s', __multiline = '/* %s */' },
-          },
         },
 
         -- A list of parser names, or "all"
@@ -197,7 +186,6 @@ table.insert(plugins, {
   { 'leoluz/nvim-dap-go', ft = 'go' },
 
   -- lf
-  { 'VebbNix/lf-vim', cmd = 'Lf' },
   { 'ptzz/lf.vim', cmd = { 'Lf', 'LfCurrentFile' } },
   { 'voldikss/vim-floaterm', cmd = { 'FloatermNew', 'FloatermToggle', 'FloatermKill' } },
 
@@ -221,7 +209,23 @@ table.insert(plugins, {
 
   -- auto-commenting
   { 'numToStr/Comment.nvim',     lazy = false },
-  'JoosepAlviste/nvim-ts-context-commentstring',
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts = {
+      -- Comment.nvim calculates this through its pre_hook.
+      enable_autocmd = false,
+      languages = {
+        javascript = {
+          __default = '// %s',
+          jsx_element = '{/* %s */}',
+          jsx_fragment = '{/* %s */}',
+          jsx_attribute = '// %s',
+          comment = '// %s',
+        },
+        typescript = { __default = '// %s', __multiline = '/* %s */' },
+      },
+    },
+  },
 
   -- surround
   { 'kylechui/nvim-surround', event = 'VeryLazy', opts = {} },

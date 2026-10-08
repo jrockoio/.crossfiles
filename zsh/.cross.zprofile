@@ -9,6 +9,7 @@ path+=("/usr/local/go/bin")
 export LSCOLORS="Cxdxgxfxexegedabagacad"
 
 if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
+# Initialize Starship after vi-mode below; .cross.zshrc provides a fallback.
 if hash bat 2> /dev/null; then alias cat=bat; fi
 if hash exa 2> /dev/null; then
   alias ls=exa
@@ -77,6 +78,11 @@ load_zgenom() {
   function zvm_after_init() {
     bindkey -s ^f "tmux-sessionizer\n"
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+    # vi-mode can replace the prompt, including after the .cross.zshrc fallback.
+    if command -v starship >/dev/null 2>&1; then
+      eval "$(starship init zsh)"
+      typeset -g __STARSHIP_ZSH_INITED=1
+    fi
   }
   source $HOME/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   # if the init script doesn't exist
@@ -110,7 +116,15 @@ nvm() {
 #pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# Keep Python shims available, but defer shell integration until pyenv is used.
+[[ -d $PYENV_ROOT/shims ]] && export PATH="$PYENV_ROOT/shims:$PATH"
+if command -v pyenv >/dev/null 2>&1; then
+  pyenv() {
+    unset -f pyenv
+    eval "$(command pyenv init -)"
+    pyenv "$@"
+  }
+fi
 
 # zsh completions
 [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
