@@ -30,8 +30,7 @@ You can select only some Stow packages:
 ```
 
 Open a new terminal afterwards. Keep the `.cross.zshrc` source line after
-machine-specific PATH setup (including Homebrew), followed by the personal
-`.personal.zshrc` hook so personal overrides take precedence. The shared hook
+machine-specific PATH setup (including Homebrew). The shared hook
 activates mise and initializes plugins. NVM loads lazily on the first `node`,
 `npm`, `npx`, or `nvm` call; do not also source `nvm.sh` in the machine entry
 point. Set `NVM_DIR` before the shared hook if needed. `.cross.zprofile` only
@@ -47,7 +46,10 @@ macOS binaries are resolved in the lockfile but have not been executed on Linux.
 ## Tools and updates
 
 `mise/.config/mise/config.toml` declares exact versions of tmux, Codex CLI,
-ripgrep, fzf, lf, and tmux-fingers. `mise.lock` records per-platform release URLs
+ripgrep, fzf, lf, and tmux-fingers. Codex CLI is enabled only on Linux; mise
+skips its installation and activation on macOS via its
+[`os` filter](https://mise.jdx.dev/dev-tools/#os-specific-tools).
+`mise.lock` records per-platform release URLs
 and checksums. Stow links the entire config directory, including the lockfile.
 The binary/cache directories are not committed.
 
@@ -66,7 +68,7 @@ updated separately; update the bootstrap version when adopting a new baseline.
 
 The initial tmux pin is 3.7c, the release selected by mise's tmux-builds backend
 at setup time. Existing tmux servers keep their original version. The new client
-was verified with Rick's existing 3.4 server. No running sessions are stopped.
+was verified with an existing 3.4 server. No running sessions are stopped.
 A separate new server can be started with `tmux -L fresh new-session`; normal
 servers use the new executable after their existing sessions naturally finish.
 

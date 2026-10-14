@@ -3,7 +3,7 @@ jobs = 2
 lockfile = true
 
 [tools]
-codex = "0.162.1"
+codex = { version = "0.162.1", os = ["linux"] }
 fzf = "0.74.5"
 "github:Morantron/tmux-fingers" = "2.7.1"
 "github:gokcehan/lf" = "r42"
