@@ -1,0 +1,9 @@
+#!/bin/sh
+# Resolve the global install even inside a project with its own mise config.
+if [ -x "$HOME/.local/bin/mise" ]; then
+    mise_bin="$HOME/.local/bin/mise"
+else
+    mise_bin=$(command -v mise) || exit 1
+fi
+fingers_bin=$(cd "$HOME" && "$mise_bin" which tmux-fingers) || exit 1
+exec "$fingers_bin" "$@"

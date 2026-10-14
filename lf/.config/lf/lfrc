@@ -4,7 +4,12 @@ set drawbox
 
 set hidden
 
-cmd open &xdg-open $f
+cmd open &{{
+  case "$(uname -s)" in
+    Darwin) open "$f" ;;
+    *) xdg-open "$f" ;;
+  esac
+}}
 
 cmd create-new-file ${{
   printf 'new-file: '

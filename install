@@ -1,12 +1,30 @@
-#!/usr/bin/env zsh
-
-for folder in $(ls -d */)
-do
-    echo "stow $folder"
-    stow -D $folder
-    stow $folder
+#!/bin/sh
+# Run from any directory. Existing conflicting files are never adopted/overwritten.
+set -eu
+repo=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+python3 "$repo/bootstrap/setup.py"
+if [ "$#" -eq 0 ]; then
+    set -- crossbin lf nvim starship tmux zsh mise
+fi
+for package do
+    case "$package" in
+        crossbin|lf|nvim|starship|tmux|zsh|mise) ;;
+        *) printf 'Unknown Stow package: %s\n' "$package" >&2; exit 1 ;;
+    esac
 done
-
-mkdir $HOME/.zsh-plugins
-git clone https://github.com/jeffreytse/zsh-vi-mode.git $HOME/.zsh-plugins/zsh-vi-mode
-git clone https://github.com/Aloxaf/fzf-tab $HOME/.zsh-plugins/fzf-tab
+stow --simulate --dir="$repo" --target="$HOME" "$@"
+stow --dir="$repo" --target="$HOME" "$@"
+if [ -x "$HOME/.local/bin/mise" ]; then
+    mise_bin="$HOME/.local/bin/mise"
+else
+    mise_bin=$(command -v mise)
+fi
+(cd "$HOME" && "$mise_bin" install --locked)
+# Add hooks only when absent; existing shell files and symlinks are preserved.
+for kind in zprofile zshrc; do
+    target="$HOME/.$kind"
+    if ! grep -qF ".cross.$kind" "$target" 2>/dev/null; then
+        printf '\n[[ -r "$HOME/.cross.%s" ]] && source "$HOME/.cross.%s"\n' "$kind" "$kind" >> "$target"
+    fi
+done
+printf 'Installed. Open a new terminal to load the shared shell configuration.\n'

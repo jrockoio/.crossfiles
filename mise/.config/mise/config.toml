@@ -1,0 +1,11 @@
+[settings]
+jobs = 2
+lockfile = true
+
+[tools]
+codex = "0.162.1"
+fzf = "0.74.5"
+"github:Morantron/tmux-fingers" = "2.7.1"
+"github:gokcehan/lf" = "r42"
+ripgrep = "15.2.0"
+tmux = "3.7c"

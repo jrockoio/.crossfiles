@@ -1,6 +1,141 @@
 #!/bin/zsh
+# Shared interactive configuration for Linux and macOS.
+[[ -o interactive ]] || return
+[[ -n ${__CROSS_ZSH_INITED:-} ]] && return
+typeset -g __CROSS_ZSH_INITED=1
+
+export LSCOLORS="Cxdxgxfxexegedabagacad"
+
+if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
+# Initialize Starship after vi-mode below; .cross.zshrc provides a fallback.
+if hash bat 2> /dev/null; then alias cat=bat; fi
+if hash exa 2> /dev/null; then
+  alias ls=exa
+  alias lsd='exa -sold'
+  alias ll='exa -abhgHlS'
+  alias lls='exa -abhgHlS -sold'
+  alias tree='exa --tree --long'
+fi
+if hash richgo 2> /dev/null; then alias go=richgo; fi # go test highlighting: github.com/kyoh86/richgo
+if hash nvim 2> /dev/null; then alias vim=nvim; fi
+alias j='just'
+
+# list sizes of folders in order including hidden
+alias dus='du -hs .[^.]* * | sort -hr'
+
+# git
+alias branch='git branch --sort=-committerdate'
+alias br="git for-each-ref --sort=-committerdate refs/heads/ --count=30 --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
+alias gco='git checkout'
+alias gci='git commit'
+alias gst='git status'
+alias gpo='git push origin'
+alias gdi='git diff'
+gad() {
+	git add "$1"
+	gst
+}
+alias gps='git push'
+alias gpl='git pull'
+alias gf='git fetch'
+alias gft='git fetch --tags --all --force'
+alias grc='git rebase --continue'
+alias grm='git rebase master'
+alias gpop='git stash pop'
+alias gmom='git fetch && git merge origin/master'
+alias gsq='git rebase -i HEAD~'
+alias gcu='git fetch && git merge --no-edit origin/main'
+alias gnow='git commit --amend --date="now" --no-edit'
+
+# fzf
+# export FZF_DEFAULT_OPTS=""
+export FZF_DEFAULT_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
+export FZF_CTRL_T_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
+
+# rust
+alias cupd='cargo install-update -gla'
+alias cupg='cargo install-update -ga'
+[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+
+# vim
+alias v='vim'
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+# lazy load nvm
+lazy_load_nvm() {
+  unset -f node nvm
+  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+}
+node() {
+  lazy_load_nvm
+  node $@
+}
+nvm() {
+  lazy_load_nvm
+  nvm $@
+}
+#end nvm
+
+#pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# Keep Python shims available, but defer shell integration until pyenv is used.
+[[ -d $PYENV_ROOT/shims ]] && export PATH="$PYENV_ROOT/shims:$PATH"
+if command -v pyenv >/dev/null 2>&1; then
+  pyenv() {
+    unset -f pyenv
+    eval "$(command pyenv init -)"
+    pyenv "$@"
+  }
+fi
+
+
+# Activate after legacy tool paths so mise owns the selected CLI versions.
+typeset -U path
+path=("$HOME/.local/bin" $path)
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+# Keep generated plugin caches outside the source-controlled configuration.
+if [[ -r "$HOME/.zgenom/zgenom.zsh" ]]; then
+  ZGEN_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/crossfiles/zgenom"
+  ZGEN_RESET_ON_CHANGE=("$HOME/.cross.zshrc")
+  source "$HOME/.zgenom/zgenom.zsh"
+
+  function zvm_config() {
+    ZVM_CURSOR_STYLE_ENABLED=false
+    ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  }
+  function zvm_after_init() {
+    bindkey -s '^f' 'tmux-sessionizer\n'
+    if command -v fzf >/dev/null 2>&1; then
+      source <(fzf --zsh)
+    fi
+    # fzf's shell integration also binds Tab; keep fzf-tab as the completer.
+    (( $+functions[enable-fzf-tab] )) && enable-fzf-tab
+    if command -v starship >/dev/null 2>&1; then
+      eval "$(starship init zsh)"
+      typeset -g __STARSHIP_ZSH_INITED=1
+    fi
+  }
+
+  fpath+=("$HOME/.config/zsh_completions")
+  autoload -Uz compinit
+  compinit -C
+  if ! zgenom saved; then
+    zgenom load jeffreytse/zsh-vi-mode
+    zgenom load Aloxaf/fzf-tab
+    zgenom load zsh-users/zsh-syntax-highlighting
+    zgenom save
+  fi
+fi
 
 if command -v starship >/dev/null 2>&1 && [[ -z ${__STARSHIP_ZSH_INITED:-} ]]; then
-  typeset -g __STARSHIP_ZSH_INITED=1
   eval "$(starship init zsh)"
+  typeset -g __STARSHIP_ZSH_INITED=1
 fi
