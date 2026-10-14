@@ -63,22 +63,20 @@ alias v='vim'
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
-# lazy load nvm
-lazy_load_nvm() {
-  unset -f node nvm
-  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-}
-node() {
-  lazy_load_nvm
-  node $@
-}
-nvm() {
-  lazy_load_nvm
-  nvm $@
-}
-#end nvm
+# Lazy-load NVM once, including npm/npx when used before node.
+# Honor a machine-specific NVM_DIR before falling back to the conventional path.
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [[ -s "$NVM_DIR/nvm.sh" ]] && (( ! $+functions[nvm] )); then
+  lazy_load_nvm() {
+    unset -f node npm npx nvm
+    source "$NVM_DIR/nvm.sh"
+  }
+  node() { lazy_load_nvm; node "$@"; }
+  npm() { lazy_load_nvm; npm "$@"; }
+  npx() { lazy_load_nvm; npx "$@"; }
+  nvm() { lazy_load_nvm; nvm "$@"; }
+fi
+# end NVM
 
 #pyenv
 export PYENV_ROOT="$HOME/.pyenv"

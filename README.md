@@ -30,8 +30,12 @@ You can select only some Stow packages:
 ```
 
 Open a new terminal afterwards. Keep the `.cross.zshrc` source line after
-machine-specific PATH setup (including NVM and Homebrew). It activates mise
-and initializes the shared plugins. `.cross.zprofile` only adds shared paths.
+machine-specific PATH setup (including Homebrew), followed by the personal
+`.personal.zshrc` hook so personal overrides take precedence. The shared hook
+activates mise and initializes plugins. NVM loads lazily on the first `node`,
+`npm`, `npx`, or `nvm` call; do not also source `nvm.sh` in the machine entry
+point. Set `NVM_DIR` before the shared hook if needed. `.cross.zprofile` only
+adds shared paths.
 Do not source secrets or machine-specific desktop configuration from this repo.
 
 Linux x86_64 and Apple Silicon macOS have complete locked binary coverage.
