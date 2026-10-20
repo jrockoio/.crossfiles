@@ -2,4 +2,4 @@
 # Source and release workflow: https://github.com/jrockoio/alog
 # Update explicitly: mise upgrade --global --bump github:jrockoio/alog
 [tools]
-"github:jrockoio/alog" = { version = "0.1.0", os = ["linux"] }
+"github:jrockoio/alog" = { version = "0.1.1", os = ["linux"] }

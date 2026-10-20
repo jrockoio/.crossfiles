@@ -78,14 +78,14 @@ url = "https://github.com/gokcehan/lf/releases/download/r42/lf-darwin-amd64.tar.
 url_api = "https://api.github.com/repos/gokcehan/lf/releases/assets/496377686"
 
 [[tools."github:jrockoio/alog"]]
-version = "0.1.0"
+version = "0.1.1"
 backend = "github:jrockoio/alog"
-specifiers = ["0.1.0"]
+specifiers = ["0.1.1"]
 
 [tools."github:jrockoio/alog"."platforms.linux-x64"]
-checksum = "sha256:3a4cab2a7349e11b8c26a92496b2fe81941a419096677c5385545c370e48629e"
-url = "https://github.com/jrockoio/alog/releases/download/v0.1.0/alog-v0.1.0-linux-any.tar.gz"
-url_api = "https://api.github.com/repos/jrockoio/alog/releases/assets/659832093"
+checksum = "sha256:c8a9178015acb227fb396551328532243c576625410567c7a5dc516158387be5"
+url = "https://github.com/jrockoio/alog/releases/download/v0.1.1/alog-v0.1.1-linux-any.tar.gz"
+url_api = "https://api.github.com/repos/jrockoio/alog/releases/assets/660220144"
 
 [[tools.ripgrep]]
 version = "15.2.0"
