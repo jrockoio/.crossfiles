@@ -6,3 +6,6 @@ nvim/.config/nvim/ftplugin/java.lua
 mise/.config/mise/config.local.toml
 mise/.config/mise/mise.local.lock
 mise/.config/mise/.mise/locks/mise.local/
+
+# Neovim runtime output is generated locally.
+/nvim.log
