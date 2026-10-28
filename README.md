@@ -139,6 +139,19 @@ cache are retained but no longer loaded by this configuration. Fzf integration
 comes from the selected `fzf --zsh`, not the old `~/.fzf.zsh` checkout script.
 NVM and pyenv remain available; they have not been migrated to mise.
 
+## Neovim
+
+The Neovim configuration requires Neovim 0.12 or later and uses the
+`main` branch of nvim-treesitter. Mise provides the Tree-sitter CLI needed to
+build parsers; a C compiler must also be available (Xcode Command Line Tools
+on macOS, or `build-essential` on Ubuntu/Pop!_OS).
+
+After pulling this migration, run `mise install --locked tree-sitter`, then
+`:Lazy restore` and `:TSUpdate` in Neovim. Missing parsers install
+asynchronously, and highlighting attaches when the buffer's parser is ready.
+Restart Neovim after the initial installation so newly installed languages
+are also discovered inside existing Markdown code blocks.
+
 ## Tmux hints
 
 - Ctrl+A, f: label supported patterns; letters copy, Ctrl+letter opens,
