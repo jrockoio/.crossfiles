@@ -103,6 +103,9 @@ table.insert(plugins, {
             local stats = vim.uv.fs_stat(vim.api.nvim_buf_get_name(args.buf))
             if not stats or stats.size <= 200 * 1024 then
               vim.treesitter.start(args.buf, lang)
+            else
+              -- Neovim's built-in ftplugins may already have started highlighting.
+              vim.treesitter.stop(args.buf)
             end
           end
 
