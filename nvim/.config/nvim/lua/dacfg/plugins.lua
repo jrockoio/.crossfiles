@@ -57,54 +57,69 @@ table.insert(plugins, {
   -- treesitter
   {
     'nvim-treesitter/nvim-treesitter',
-    -- This setup uses the legacy nvim-treesitter.configs API.
-    branch = 'master',
+    branch = 'main',
     dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master' },
+      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
     },
     build = ':TSUpdate',
     lazy = false,
     config = function()
-      require("nvim-treesitter.install").prefer_git = true
-      require 'nvim-treesitter.configs'.setup {
-        -- for windwp/nvim-ts-autotag
-        autotag = {
-          enable = true,
-        },
-
-        -- A list of parser names, or "all"
-        ensure_installed = {
-          "go",
-          "lua",
-          "html",
-          "json",
-          "bash",
-          "css",
-          "javascript",
-          "typescript",
-          "tsx",
-          "java",
-          "markdown",
-          "toml",
-          "python",
-          "yaml",
-        },
-
-        sync_install = false,
-        auto_install = true,
-        highlight = {
-          enable = true,
-          disable = function(_, bufnr)
-            local uv = vim.uv or vim.loop
-            local ok, stats = pcall(uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-            return ok and stats and stats.size > 200 * 1024
-          end,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true,
-        }
+      local treesitter = require('nvim-treesitter')
+      local parsers = {
+        "go",
+        "lua",
+        "html",
+        "json",
+        "bash",
+        "css",
+        "javascript",
+        "typescript",
+        "tsx",
+        "java",
+        "markdown",
+        "markdown_inline",
+        "toml",
+        "python",
+        "yaml",
       }
+      local installation = treesitter.install(parsers, { max_jobs = 2 })
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('CrossfilesTreesitter', { clear = true }),
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if not lang or not vim.list_contains(treesitter.get_available(), lang) then
+            return
+          end
+
+          local function attach()
+            if not vim.api.nvim_buf_is_valid(args.buf) or vim.bo[args.buf].filetype ~= args.match then
+              return
+            end
+            if not vim.list_contains(treesitter.get_installed('parsers'), lang) then
+              return
+            end
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            local stats = vim.uv.fs_stat(vim.api.nvim_buf_get_name(args.buf))
+            if not stats or stats.size <= 200 * 1024 then
+              vim.treesitter.start(args.buf, lang)
+            end
+          end
+
+          if vim.list_contains(treesitter.get_installed('parsers'), lang) then
+            attach()
+          else
+            -- Attach to this buffer once its parser is available on first use.
+            local task = vim.list_contains(parsers, lang) and installation
+              or treesitter.install({ lang }, { max_jobs = 2 })
+            task:await(function(err)
+              if not err then
+                vim.schedule(attach)
+              end
+            end)
+          end
+        end,
+      })
     end,
   },
 
@@ -234,7 +249,7 @@ table.insert(plugins, {
   -- auto end functions
   { 'tpope/vim-endwise', event = 'InsertEnter' },
   -- auto close html tags
-  'windwp/nvim-ts-autotag',
+  { 'windwp/nvim-ts-autotag', opts = {} },
   -- split/join
   { 'AndrewRadev/splitjoin.vim', keys = { 'gS', 'gJ' } },
 
