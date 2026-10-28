@@ -1,3 +1,8 @@
 nvim/.config/nvim/after/plugin/gitlinker.lua
 nvim/.config/nvim/ftdetect/groovy.vim
 nvim/.config/nvim/ftplugin/java.lua
+
+# Private mise overlays belong in ~/.dotfiles, never in this public checkout.
+mise/.config/mise/config.local.toml
+mise/.config/mise/mise.local.lock
+mise/.config/mise/.mise/locks/mise.local/

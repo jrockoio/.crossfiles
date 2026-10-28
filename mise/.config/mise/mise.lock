@@ -2,25 +2,45 @@
 
 lockfile_version = 3
 
-[[tools.codex]]
-version = "0.162.1"
-backend = "aqua:openai/codex"
-specifiers = ["0.162.1"]
+[[tools.bat]]
+version = "0.26.1"
+backend = "aqua:sharkdp/bat"
+specifiers = ["0.26.1"]
 
-[tools.codex."platforms.linux-x64"]
-checksum = "sha256:a676f5722aae0d86cbe3764332f08eab1fdd89dc0a300b3ad4ffbf48611fa3e3"
-url = "https://github.com/openai/codex/releases/download/rust-v0.162.1/codex-package-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/625965833"
+[tools.bat."platforms.linux-x64"]
+checksum = "sha256:726f04c8f576a7fd18b7634f1bbf2f915c43494c1c0f013baa3287edb0d5a2a3"
+url = "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/bat/releases/assets/323549181"
 
-[tools.codex."platforms.macos-arm64"]
-checksum = "sha256:88e37ccddf5a0f4ea9dc1be13c66a2a94f9c2d1a04f3ace9053d71b3939e885d"
-url = "https://github.com/openai/codex/releases/download/rust-v0.162.1/codex-package-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/625989262"
+[tools.bat."platforms.macos-arm64"]
+checksum = "sha256:e30beff26779c9bf60bb541e1d79046250cb74378f2757f8eb250afddb19e114"
+url = "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/bat/releases/assets/323548442"
 
-[tools.codex."platforms.macos-x64"]
-checksum = "sha256:894ac20afe819d4fa2a4be8cd27c54fd606338b86036e8ed9b6c9978c2dc7aed"
-url = "https://github.com/openai/codex/releases/download/rust-v0.162.1/codex-package-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/625976055"
+[tools.bat."platforms.macos-x64"]
+checksum = "sha256:830d63b0bba1fa040542ec569e3cf77f60d3356b9de75116a344b061e0894245"
+url = "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/bat/releases/assets/323549786"
+
+[[tools.fd]]
+version = "10.5.0"
+backend = "aqua:sharkdp/fd"
+specifiers = ["10.5.0"]
+
+[tools.fd."platforms.linux-x64"]
+checksum = "sha256:a1259cd129636efbc3fef123525c1b49e88fe5088c012630983c310e52fdfa95"
+url = "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/530481615"
+
+[tools.fd."platforms.macos-arm64"]
+checksum = "sha256:b67e1836c468e42e411984b56e52fa7abec08c2bd22c867398e7cc134aac5e12"
+url = "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/530481346"
+
+[tools.fd."platforms.macos-x64"]
+checksum = "sha256:7e31028c62c6955877735d0406807aa484c2a5e6f86235a59e26c29c301da590"
+url = "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/530484719"
 
 [[tools.fzf]]
 version = "0.74.5"
@@ -77,15 +97,82 @@ checksum = "sha256:3a3c2180cce9274d5c4713b092cff2b1169db9d9df4334e1c40d485eab1e5
 url = "https://github.com/gokcehan/lf/releases/download/r42/lf-darwin-amd64.tar.gz"
 url_api = "https://api.github.com/repos/gokcehan/lf/releases/assets/496377686"
 
-[[tools."github:jrockoio/alog"]]
-version = "0.1.1"
-backend = "github:jrockoio/alog"
-specifiers = ["0.1.1"]
+[[tools.go]]
+version = "1.27.3"
+backend = "core:go"
+specifiers = ["1.27.3"]
 
-[tools."github:jrockoio/alog"."platforms.linux-x64"]
-checksum = "sha256:c8a9178015acb227fb396551328532243c576625410567c7a5dc516158387be5"
-url = "https://github.com/jrockoio/alog/releases/download/v0.1.1/alog-v0.1.1-linux-any.tar.gz"
-url_api = "https://api.github.com/repos/jrockoio/alog/releases/assets/660220144"
+[tools.go."platforms.linux-x64"]
+checksum = "sha256:65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40"
+url = "https://dl.google.com/go/go1.27.3.linux-amd64.tar.gz"
+
+[tools.go."platforms.macos-arm64"]
+checksum = "sha256:dd3908cf20959d798c1e06ebe5b72213f0505ce01373b40ce3110975a6cd99c2"
+url = "https://dl.google.com/go/go1.27.3.darwin-arm64.tar.gz"
+
+[tools.go."platforms.macos-x64"]
+checksum = "sha256:b6f8e931e4ab497fcde6da8ae4499a58f9d258e55c8a80824a516eae5950a750"
+url = "https://dl.google.com/go/go1.27.3.darwin-amd64.tar.gz"
+
+[[tools.just]]
+version = "1.59.0"
+backend = "aqua:casey/just"
+specifiers = ["1.59.0"]
+
+[tools.just."platforms.linux-x64"]
+checksum = "sha256:409044617b6f06517c1035e55ca38c8c856ff8b650e41bc2aa1ef82d5903a23e"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/642949555"
+
+[tools.just."platforms.macos-arm64"]
+checksum = "sha256:6574cea774ed4cae12e24b6aa11857de33e80dab4667cf628fd5840df96a2a9d"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/643129724"
+
+[tools.just."platforms.macos-x64"]
+checksum = "sha256:036ead9df9bc31dbae9934ae3b4236ed124d0bafcffd33439460ae084d5c9cb7"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/643131819"
+
+[[tools.neovim]]
+version = "0.12.6"
+backend = "aqua:neovim/neovim"
+specifiers = ["0.12.6"]
+
+[tools.neovim."platforms.linux-x64"]
+checksum = "sha256:474430d53e6264f6d6dd18db42d6dc9df3a1b56ca9e88a325bbf860e1a811d87"
+url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/neovim/neovim/releases/assets/625399155"
+
+[tools.neovim."platforms.macos-arm64"]
+checksum = "sha256:1dbd148222b051ba6c307c4d17a318ed083df018a4f6a5a0ce46955ffc9ab87b"
+url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/neovim/neovim/releases/assets/625399162"
+
+[tools.neovim."platforms.macos-x64"]
+checksum = "sha256:481424f1dbc85f637d57e47d27d042aa9c883e5a4fe9ee64fc4ee9573b221998"
+url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-macos-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/neovim/neovim/releases/assets/625399154"
+
+[[tools.richgo]]
+version = "0.3.12"
+backend = "aqua:kyoh86/richgo"
+specifiers = ["0.3.12"]
+
+[tools.richgo."platforms.linux-x64"]
+checksum = "sha256:4d63017573931e134a683843bc5d1cf996818f64a3834a65998ecc0d3d9409ae"
+url = "https://github.com/kyoh86/richgo/releases/download/v0.3.12/richgo_0.3.12_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/kyoh86/richgo/releases/assets/97199873"
+
+[tools.richgo."platforms.macos-arm64"]
+checksum = "sha256:54ebd7f253b282f37d78cbb4d80e8688ac28246481c3a95e8ccaa3620c3de611"
+url = "https://github.com/kyoh86/richgo/releases/download/v0.3.12/richgo_0.3.12_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/kyoh86/richgo/releases/assets/97199868"
+
+[tools.richgo."platforms.macos-x64"]
+checksum = "sha256:c5976037976c74d9ed3753aa1b09cc395fe31cf1201e17f65cc58c2cda91e759"
+url = "https://github.com/kyoh86/richgo/releases/download/v0.3.12/richgo_0.3.12_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/kyoh86/richgo/releases/assets/97199866"
 
 [[tools.ripgrep]]
 version = "15.2.0"
@@ -106,6 +193,26 @@ url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/47811
 checksum = "sha256:af7825fcc69a2afc7a7aea55fc9af90e26421d8f20fe59df32e233c0b8a231c1"
 url = "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/478119585"
+
+[[tools.starship]]
+version = "1.27.0"
+backend = "aqua:starship/starship"
+specifiers = ["1.27.0"]
+
+[tools.starship."platforms.linux-x64"]
+checksum = "sha256:3b94758850901717eb36aa1b53f8492c1322506ec6d41273bc6151e79ed8e4a1"
+url = "https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/starship/starship/releases/assets/650074501"
+
+[tools.starship."platforms.macos-arm64"]
+checksum = "sha256:5362da8cb2928f98f3ce0ffda697cf0f8de70081db000dae316d6d3a404f6cf0"
+url = "https://github.com/starship/starship/releases/download/v1.27.0/starship-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/starship/starship/releases/assets/650074353"
+
+[tools.starship."platforms.macos-x64"]
+checksum = "sha256:344e4d38787e0aa86dd522ae5462e6fb6da1227691f81a79ffed480a4563ccb3"
+url = "https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/starship/starship/releases/assets/650074453"
 
 [[tools.tmux]]
 version = "3.7c"

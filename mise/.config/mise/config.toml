@@ -1,11 +1,22 @@
+# Shared CLI tools for the work Mac and personal Linux laptop.
+# Personal tools, sources, and tasks belong in config.local.toml from dotfiles.
 [settings]
 jobs = 2
 lockfile = true
 
+[tool_alias]
+neovim = "aqua:neovim/neovim"
+
 [tools]
-codex = { version = "0.162.1", os = ["linux"] }
+bat = "0.26.1"
+fd = "10.5.0"
 fzf = "0.74.5"
 "github:Morantron/tmux-fingers" = "2.7.1"
 "github:gokcehan/lf" = "r42"
+go = "1.27.3"
+just = "1.59.0"
+neovim = "0.12.6"
+richgo = "0.3.12"
 ripgrep = "15.2.0"
+starship = "1.27.0"
 tmux = "3.7c"

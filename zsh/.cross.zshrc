@@ -8,7 +8,6 @@ export LSCOLORS="Cxdxgxfxexegedabagacad"
 
 if hash zoxide 2> /dev/null; then eval "$(zoxide init zsh)"; fi
 # Initialize Starship after vi-mode below; .cross.zshrc provides a fallback.
-if hash bat 2> /dev/null; then alias cat=bat; fi
 if hash exa 2> /dev/null; then
   alias ls=exa
   alias lsd='exa -sold'
@@ -16,8 +15,6 @@ if hash exa 2> /dev/null; then
   alias lls='exa -abhgHlS -sold'
   alias tree='exa --tree --long'
 fi
-if hash richgo 2> /dev/null; then alias go=richgo; fi # go test highlighting: github.com/kyoh86/richgo
-if hash nvim 2> /dev/null; then alias vim=nvim; fi
 alias j='just'
 
 # list sizes of folders in order including hidden
@@ -98,6 +95,11 @@ path=("$HOME/.local/bin" $path)
 if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi
+
+# Resolve these after mise activation, including on machines without legacy copies.
+if command -v bat >/dev/null 2>&1; then alias cat=bat; fi
+if command -v richgo >/dev/null 2>&1; then alias go=richgo; fi
+if command -v nvim >/dev/null 2>&1; then alias vim=nvim; fi
 
 # Keep generated plugin caches outside the source-controlled configuration.
 if [[ -r "$HOME/.zgenom/zgenom.zsh" ]]; then

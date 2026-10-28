@@ -12,8 +12,22 @@ for package do
         *) printf 'Unknown Stow package: %s\n' "$package" >&2; exit 1 ;;
     esac
 done
-stow --simulate --dir="$repo" --target="$HOME" "$@"
-stow --dir="$repo" --target="$HOME" "$@"
+# Mise must remain a real directory so private dotfiles can add local files.
+# Restowing with --no-folding also unfolds the directory link from older installs.
+for package do
+    if [ "$package" = mise ]; then
+        stow --simulate --restow --no-folding --dir="$repo" --target="$HOME" "$package"
+    else
+        stow --simulate --dir="$repo" --target="$HOME" "$package"
+    fi
+done
+for package do
+    if [ "$package" = mise ]; then
+        stow --restow --no-folding --dir="$repo" --target="$HOME" "$package"
+    else
+        stow --dir="$repo" --target="$HOME" "$package"
+    fi
+done
 if [ -x "$HOME/.local/bin/mise" ]; then
     mise_bin="$HOME/.local/bin/mise"
 else
